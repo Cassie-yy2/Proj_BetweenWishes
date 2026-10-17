@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>心愿之间 (Wish Between) V1.0 产品需求文档 (PRD)</title>
+  <meta name="description" content="面向情侣的心愿分享与惊喜送礼应用产品需求文档 (PRD) V1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #f43f5e;
+      --primary-light: #fff1f2;
+      --primary-border: #fecdd3;
+      --primary-dark: #e11d48;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --emerald-50: #ecfdf5;
+      --emerald-600: #059669;
+      --amber-50: #fffbeb;
+      --amber-600: #d97706;
+      --sidebar-width: 280px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Plus Jakarta Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background-color: #fcfcfd;
+      color: var(--slate-800);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top utility bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--slate-200);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--slate-900);
+      font-size: 1rem;
+      text-decoration: none;
+    }
+
+    .topbar-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: none;
+    }
+
+    .btn-secondary {
+      background: var(--slate-100);
+      color: var(--slate-700);
+      border: 1px solid var(--slate-200);
+    }
+    .btn-secondary:hover {
+      background: var(--slate-200);
+      color: var(--slate-900);
+    }
+
+    .btn-primary {
+      background: var(--slate-900);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--slate-800);
+    }
+
+    /* Layout structure */
+    .layout {
+      display: flex;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 2rem 2rem 5rem;
+      gap: 3rem;
+    }
+
+    /* Sidebar Table of Contents */
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      position: sticky;
+      top: calc(56px + 2rem);
+      height: calc(100vh - 56px - 4rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate-400);
+      margin-bottom: 0.75rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      space-y: 2px;
+    }
+
+    .toc-item a {
+      display: block;
+      padding: 6px 10px;
+      font-size: 13px;
+      color: var(--slate-600);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toc-item a:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* Main article document */
+    .content {
+      flex: 1;
+      min-width: 0;
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 24px;
+      padding: 3.5rem 4rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Header block */
+    .doc-header {
+      border-bottom: 1px solid var(--slate-200);
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .doc-meta-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .doc-tag {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+    .tag-ver {
+      background: #f1f5f9;
+      color: #334155;
+    }
+    .tag-status {
+      background: var(--emerald-50);
+      color: var(--emerald-600);
+      border: 1px solid #a7f3d0;
+    }
+
+    h1.doc-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--slate-900);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .doc-subtitle {
+      font-size: 1.1rem;
+      color: var(--slate-500);
+    }
+
+    /* Section Typography */
+    h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      letter-spacing: -0.01em;
+      margin-top: 3rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--slate-100);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 1.1rem;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--slate-800);
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--slate-700);
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--slate-600);
+    }
+
+    ul, ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      color: var(--slate-600);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    strong {
+      color: var(--slate-800);
+      font-weight: 600;
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin: 1.5rem 0 2rem;
+      border: 1px solid var(--slate-200);
+      border-radius: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--slate-50);
+      padding: 10px 16px;
+      font-weight: 600;
+      color: var(--slate-700);
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--slate-100);
+      color: var(--slate-600);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #fafafc;
+    }
+
+    /* Callout & Highlights */
+    .callout {
+      background: var(--slate-50);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 12px 12px 0;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      font-size: 14px;
+    }
+
+    .callout-p0 {
+      border-left-color: var(--emerald-600);
+      background: var(--emerald-50);
+      color: #064e3b;
+    }
+
+    .callout-warn {
+      border-left-color: var(--amber-600);
+      background: var(--amber-50);
+      color: #78350f;
+    }
+
+    /* Flow Diagrams */
+    .flow-steps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 1.5rem 0;
+      padding: 1.25rem;
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 14px;
+    }
+
+    .step-box {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-800);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    .step-box.primary {
+      background: var(--primary-light);
+      border-color: var(--primary-border);
+      color: var(--primary-dark);
+    }
+
+    .step-arrow {
+      color: var(--slate-400);
+      font-weight: bold;
+    }
+
+    /* Resume Quote Block */
+    .resume-block {
+      background: linear-gradient(135deg, #fff1f2 0%, #fffbeb 100%);
+      border: 1px solid var(--primary-border);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      margin-top: 2.5rem;
+      position: relative;
+    }
+
+    .resume-block h4 {
+      color: var(--primary-dark);
+      font-size: 15px;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .resume-text {
+      font-size: 14px;
+      color: var(--slate-700);
+      line-height: 1.8;
+      margin-bottom: 0;
+    }
+
+    .copy-btn {
+      font-size: 12px;
+      background: white;
+      border: 1px solid var(--primary-border);
+      color: var(--primary-dark);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .sidebar {
+        display: none;
+      }
+      .content {
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+      }
+      .layout {
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    @media print {
+      .topbar, .sidebar, .btn, .copy-btn {
+        display: none;
+      }
+      .content {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+      .layout {
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="topbar">
+    <a href="/" class="topbar-brand">
+      <span>心愿之间（Wish Between）</span>
+      <span class="topbar-badge">PRD V1.0</span>
+    </a>
+    <div class="topbar-actions">
+      <button class="btn btn-secondary" onclick="window.print()">
+        🖨️ 打印 / 导出 PDF
+      </button>
+      <a href="/" class="btn btn-primary">
+        🚀 返回原型体验应用
+      </a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-title">目录导航 (Table of Contents)</div>
+      <ul class="toc-list">
+        <li class="toc-item"><a href="#sec-overview">一、产品概述</a></li>
+        <li class="toc-item"><a href="#sec-background">二、产品背景与痛点</a></li>
+        <li class="toc-item"><a href="#sec-goals">三、产品目标</a></li>
+        <li class="toc-item"><a href="#sec-users">四、目标用户</a></li>
+        <li class="toc-item"><a href="#sec-scope">五、V1.0 产品范围 (MVP)</a></li>
+        <li class="toc-item"><a href="#sec-p0-account">&nbsp;&nbsp;5.1 用户账号</a></li>
+        <li class="toc-item"><a href="#sec-p0-couple">&nbsp;&nbsp;5.2 情侣唯一绑定</a></li>
+        <li class="toc-item"><a href="#sec-p0-wishlist">&nbsp;&nbsp;5.3 心愿清单管理</a></li>
+        <li class="toc-item"><a href="#sec-p0-privacy">&nbsp;&nbsp;5.4 心愿互通与权限</a></li>
+        <li class="toc-item"><a href="#sec-p0-draw">&nbsp;&nbsp;5.5 随机抽选与保密送礼</a></li>
+        <li class="toc-item"><a href="#sec-p0-progress">&nbsp;&nbsp;5.6 送礼进度状态流转</a></li>
+        <li class="toc-item"><a href="#sec-p0-history">&nbsp;&nbsp;5.7 礼物历史记录</a></li>
+        <li class="toc-item"><a href="#sec-p0-notice">&nbsp;&nbsp;5.8 站内通知系统</a></li>
+        <li class="toc-item"><a href="#sec-p0-anniversary">&nbsp;&nbsp;5.9 纪念日与节日备忘</a></li>
+        <li class="toc-item"><a href="#sec-not-do">六、V1.0 暂不做功能</a></li>
+        <li class="toc-item"><a href="#sec-pages">七、页面结构设计</a></li>
+        <li class="toc-item"><a href="#sec-flows">八、核心用户流程</a></li>
+        <li class="toc-item"><a href="#sec-criteria">九、原型验收标准</a></li>
+        <li class="toc-item"><a href="#sec-roadmap">十、未来版本规划</a></li>
+        <li class="toc-item"><a href="#sec-resume">💡 简历项目描述</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main PRD Content -->
+    <main class="content">
+      <!-- Doc Header -->
+      <div class="doc-header">
+        <div class="doc-meta-strip">
+          <span class="doc-tag tag-ver">文档版本：V1.0 (MVP)</span>
+          <span class="doc-tag tag-status">状态：正式设计验证阶段</span>
+          <span style="font-size: 13px; color: var(--slate-400);">最后更新：2026-10-12</span>
+        </div>
+        <h1 class="doc-title">心愿之间（Wish Between）产品需求文档</h1>
+        <p class="doc-subtitle">面向情侣的心愿分享与惊喜送礼闭环应用原型设计说明书</p>
+      </div>
+
+      <!-- Section 1 -->
+      <section id="sec-overview">
+        <h2>一、产品概述</h2>
+        <h3>1.1 产品名称</h3>
+        <p><strong>心愿之间（Wish Between）</strong></p>
+
+        <h3>1.2 产品定位</h3>
+        <p>一款<strong>面向情侣</strong>的心愿分享与惊喜送礼应用。通过心愿清单帮助用户真诚、无负担地表达自己的喜好；通过随机抽选与保密机制帮助另一半在适当时刻完成充满惊喜感的送礼过程。</p>
+
+        <h3>1.3 产品 Slogan</h3>
+        <div class="callout">
+          <strong>愿望悄悄许，惊喜自然来。</strong>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section id="sec-background">
+        <h2>二、产品背景与用户痛点</h2>
+        <p>在情侣恋爱与节日互动中，送礼通常存在以下核心问题：</p>
+        
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 20%;">角色</th>
+                <th style="width: 40%;">日常痛点</th>
+                <th style="width: 40%;">心理诉求</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>收礼方（被送礼人）</strong></td>
+                <td>
+                  • 不好意思直接开口要求特定礼物；<br>
+                  • 暗示容易被对方忽略或误解；<br>
+                  • 收到不对心意的礼物时既尴尬又浪费。
+                </td>
+                <td>
+                  希望另一半能送自己真正喜欢的礼物，同时不想显得功利，渴望保留仪式感。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>送礼方（挑选礼物人）</strong></td>
+                <td>
+                  • 不清楚对方当下真正想要、缺少什么；<br>
+                  • 担心买错型号、尺寸或色号踩雷；<br>
+                  • 直接问会丧失神秘感，自行瞎猜又压力巨大。
+                </td>
+                <td>
+                  希望有一份明确的“灵感参考答案”，但送出时依然是一场未知惊喜。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>因此设计「心愿之间」：</strong>让用户平时提前记录愿望，由另一半在合适的时候进行预算筛选、随机抽取与惊喜赠送。</p>
+      </section>
+
+      <!-- Section 3 -->
+      <section id="sec-goals">
+        <h2>三、产品目标</h2>
+        <h3>3.1 核心目标</h3>
+        <p>建立情侣之间的<strong>「心愿表达 → 惊喜抽选 → 礼物完成」</strong>良性互动闭环：</p>
+        <div class="flow-steps">
+          <div class="step-box">1. 心愿表达 (平时记录)</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">2. 惊喜抽选 (节日/纪念日)</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">3. 保密履约 (线下下单)</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">4. 送出揭晓 (仪式感)</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">5. 历史珍藏 (共同回忆)</div>
+        </div>
+
+        <h3>3.2 V1.0 验证目标 (MVP)</h3>
+        <p>验证情侣用户是否愿意通过心愿清单降低送礼决策与沟通成本，同时通过随机抽选机制保留彼此期望的送礼惊喜感。</p>
+      </section>
+
+      <!-- Section 4 -->
+      <section id="sec-users">
+        <h2>四、目标用户</h2>
+        <p><strong>核心用户：情侣用户。</strong></p>
+        <ul>
+          <li><strong>热恋中的情侣</strong>：互送礼物频率高，注重仪式感与惊喜感；</li>
+          <li><strong>异地恋情侣</strong>：无法经常线下见面，渴望通过心愿单寄托思念与精准送礼；</li>
+          <li><strong>纪念日/生日/节日有送礼需求的用户</strong>：渴望消除送礼焦虑，避开直男/直女审美误区。</li>
+        </ul>
+      </section>
+
+      <!-- Section 5 -->
+      <section id="sec-scope">
+        <h2>五、V1.0 产品范围（MVP 必做功能 P0）</h2>
+
+        <h3 id="sec-p0-account">5.1 用户账号</h3>
+        <p>支持基础账号能力，包括注册与登录、用户头像设置（预设萌趣头像 / 自定义链接）、昵称、唯一用户名（用于情侣邀请搜索）以及个性签名。</p>
+
+        <h3 id="sec-p0-couple">5.2 情侣唯一绑定</h3>
+        <p><strong>功能说明：</strong>情侣双方建立唯一关系，共同管理彼此的心愿与送礼空间。</p>
+        <div class="flow-steps">
+          <div class="step-box">A 发送情侣邀请 (账号搜索 / 链接)</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">B 接受确认</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">建立唯一情侣关系空间</div>
+        </div>
+        <p><strong>核心业务规则：</strong></p>
+        <ul>
+          <li><strong>双向确认</strong>：必须接收方主动确认接受后才能建立绑定；未接受时不互通心愿；</li>
+          <li><strong>唯一性约束</strong>：<strong>一个账号在 V1.0 中只能绑定一个情侣对象</strong>，无法与多个人同时绑定；</li>
+          <li><strong>解除绑定机制</strong>：任一方均可单方面解除绑定。解除后立即终止双方之间所有未完成的抽选任务，对应已锁定的心愿立即解除锁定重回清单，并向对方发送站内解绑通知。</li>
+        </ul>
+
+        <h3 id="sec-p0-wishlist">5.3 我的心愿清单</h3>
+        <p><strong>功能说明：</strong>用户创建并维护属于自己的礼物愿望。</p>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 25%;">字段</th>
+                <th style="width: 25%;">必填/选填</th>
+                <th style="width: 50%;">业务要求与说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>心愿名称</strong></td>
+                <td><span style="color: var(--primary-dark); font-weight:600;">必填</span></td>
+                <td>心仪礼物标题，如“复古手冲咖啡壶”、“NuPhy 矮轴机械键盘”</td>
+              </tr>
+              <tr>
+                <td><strong>商品图片</strong></td>
+                <td>选填</td>
+                <td>最多支持 5 张商品参考图（支持快捷预设图与网络图片）</td>
+              </tr>
+              <tr>
+                <td><strong>参考价格</strong></td>
+                <td>选填</td>
+                <td>数字数值（元），用于送礼方的最高预算筛选匹配</td>
+              </tr>
+              <tr>
+                <td><strong>商品链接</strong></td>
+                <td>选填</td>
+                <td>淘宝/京东/天猫/得物等平台商品网页链接</td>
+              </tr>
+              <tr>
+                <td><strong>规格参数</strong></td>
+                <td>选填</td>
+                <td>如颜色、尺码、型号、容量（如“燕麦米色 / M码”）</td>
+              </tr>
+              <tr>
+                <td><strong>优先级</strong></td>
+                <td><span style="color: var(--primary-dark); font-weight:600;">必选</span></td>
+                <td>分为 🔥高 / ✨中 / 🌱低（直接影响抽选算法命中概率）</td>
+              </tr>
+              <tr>
+                <td><strong>心愿备注</strong></td>
+                <td>选填</td>
+                <td>个人喜好补充说明、期许理由或使用场景</td>
+              </tr>
+              <tr>
+                <td><strong>期望截止日期</strong></td>
+                <td>选填</td>
+                <td>到期后该心愿自动暂停参与新的送礼抽选</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>心愿展示与排序：</strong></p>
+        <ul>
+          <li><strong>多视图切换</strong>：支持高颜值「卡片网格模式」与紧凑高密度的「列表模式」自由切换；</li>
+          <li><strong>排序方式</strong>：默认按照添加时间倒序，支持分类与优先级筛选；</li>
+          <li><strong>清单暂停</strong>：支持一键暂停清单参与抽选；暂停后不影响已锁定的送礼任务。</li>
+        </ul>
+
+        <h3 id="sec-p0-privacy">5.4 心愿可见权限</h3>
+        <p><strong>V1.0 极致简化：</strong></p>
+        <ul>
+          <li>双方完成情侣绑定后，<strong>默认互相可查看彼此的心愿清单</strong>；</li>
+          <li>在「心愿」页面顶部提供分段切换器：<strong>【我的心愿】 ⇋ 【TA的心愿】</strong>；</li>
+          <li>V1.0 暂不包含复杂的分组权限、公开分享链接与多人授权。</li>
+        </ul>
+
+        <h3 id="sec-p0-draw">5.5 随机抽选送礼（核心惊喜机制）</h3>
+        <p><strong>功能说明：</strong>情侣一方可以从另一方的心愿清单中随机抽取一份礼物进行准备。</p>
+        <div class="flow-steps">
+          <div class="step-box">进入“为TA抽选”</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">设置最高预算 (选填)</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">点击盲盒抽选</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">抽中并揭晓结果</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">「就选它了」或「再抽一次」</div>
+        </div>
+
+        <p><strong>抽选算法与业务规则：</strong></p>
+        <ul>
+          <li><strong>优先级权重</strong>：高优先级心愿赋予更高抽中概率（加权算法：高权重 5、中权重 2、低权重 1）；同优先级同概率随机抽取；</li>
+          <li><strong>预算筛选规则</strong>：填写预算后，仅抽取标有明确价格且不超过预算的心愿；<strong>价格未知的心愿不参与设置了预算的抽选</strong>；不填预算则全部心愿参与；</li>
+          <li><strong>连续重抽排除机制</strong>：
+            <ul>
+              <li>点击<strong>「就选它了」</strong>：锁定该心愿，心愿进入送礼者的进行中任务，不再重复被抽；</li>
+              <li>点击<strong>「再抽一次」</strong>：<strong>立即自动触发下一次抽选，并且在本次抽选会话中严格排除刚刚抽中的物品</strong>，防止连续抽到同一件；</li>
+            </ul>
+          </li>
+          <li><strong>防重复锁定</strong>：已被当前送礼关系抽中的心愿立即进入锁定状态，不可再次抽取；</li>
+          <li><strong>逾期过滤</strong>：截止日期已过的心愿自动不参与新的抽选。</li>
+        </ul>
+
+        <h3 id="sec-p0-progress">5.6 送礼进度管理（全流程保密）</h3>
+        <p><strong>状态流转：</strong></p>
+        <div class="flow-steps">
+          <div class="step-box primary">已抽中 (锁定心愿)</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">已购买 (记录凭证备忘)</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">已送出 (揭晓心意)</div>
+        </div>
+
+        <p><strong>保密与体验要求：</strong></p>
+        <ul>
+          <li><strong>抽选过程、抽中状态及购买备注全程对心愿主人严格保密</strong>；心愿主人在查看自己清单时完全看不到剧透；</li>
+          <li>只有当送礼方在线下亲手送出礼物后，在 App 中点击<strong>「确认已送出！」</strong>，系统才会触发全屏庆祝礼花，正式向收礼方发送惊喜通知并揭晓送礼者；</li>
+          <li><strong>中途取消机制</strong>：送礼方可在任何阶段放弃送礼任务（二次确认）。放弃后心愿立即解锁重回候选池，<strong>系统不会向心愿主人发送取消通知</strong>，最大程度保护隐私与期待。</li>
+        </ul>
+
+        <h3 id="sec-p0-history">5.7 礼物历史记录</h3>
+        <p>送礼完成后，记录自动归档至「送礼历史」，形成情侣专属的甜蜜回忆册：</p>
+        <ul>
+          <li><strong>我收到的礼物</strong>：查看收到的心愿物品、揭晓的送礼方、送达时间以及对方留下的暖心备忘；</li>
+          <li><strong>我送出的心意</strong>：查看自己送给另一半的礼物历史足迹。</li>
+        </ul>
+
+        <h3 id="sec-p0-notice">5.8 站内通知系统</h3>
+        <p>包含四大核心站内通知类型：</p>
+        <ul>
+          <li><strong>情侣绑定通知</strong>：收到绑定邀请、邀请被接受/拒绝；</li>
+          <li><strong>送礼惊喜通知</strong>：另一半确认送出礼物后的惊喜揭晓与祝福；</li>
+          <li><strong>心愿变动通知</strong>：若主人删除了已被抽中的心愿，系统自动终止送礼任务并通知送礼方；</li>
+          <li><strong>关系变动通知</strong>：情侣关系解除提醒。</li>
+        </ul>
+
+        <h3 id="sec-p0-anniversary">5.9 心动纪念日与节日备忘（恋爱纪念日、生日、情人节等）</h3>
+        <p><strong>功能说明：</strong>情侣送礼高度依赖节点触发（相恋周年、双方生日、情人节、圣诞节等）。应用提供仪式感十足的纪念日管理与倒数备忘功能，将「纪念日倒数」与「心愿抽选」深度联动。</p>
+        <ul>
+          <li><strong>预设情侣关键节点</strong>：支持一键快捷设定恋爱纪念日（在一起的第一天）、TA的生日、我的生日、西洋情人节 (2.14)、520 告白日、七夕情人节、圣诞节 (12.25) 及自定义纪念日；</li>
+          <li><strong>相恋天数与倒数日自动计算</strong>：
+            <ul>
+              <li><strong>恋爱天数累计</strong>：自动计算相伴总天数（例如“相恋第 876 天”），直观呈现长情岁月；</li>
+              <li><strong>周期性节日倒数</strong>：每年自动循环计算下一个纪念日剩余天数（例如“阿澈的生日 还有 24 天”）；</li>
+            </ul>
+          </li>
+          <li><strong>提前送礼备忘提醒</strong>：支持自定义提前提醒天数（提前3天、7天、15天、30天），在首页与抽选送礼页面显著展示备礼提醒；</li>
+          <li><strong>送礼抽选无缝联动</strong>：倒数日卡片直接附带「为TA备礼 / 抽选心愿」入口，一键直达抽选流程，解决节日将至不知道挑什么礼物的核心痛点。</li>
+        </ul>
+      </section>
+
+      <!-- Section 6 -->
+      <section id="sec-not-do">
+        <h2>六、V1.0 暂不做功能（严控 MVP 范围）</h2>
+        <div class="callout callout-warn">
+          为确保 V1.0 能够快速验证情侣核心闭环，以下功能明确<strong>不纳入</strong>本次开发范围：
+        </div>
+        <ul>
+          <li>❌ <strong>多人绑定</strong>（V1.0 仅限一对一情侣）；</li>
+          <li>❌ <strong>朋友/家人等多重复杂关系</strong>；</li>
+          <li>❌ <strong>外部公开分享链接与网页游客查看</strong>；</li>
+          <li>❌ <strong>分组权限体系</strong>；</li>
+          <li>❌ <strong>独立避雷清单</strong>（简化由心愿备注表达）；</li>
+          <li>❌ <strong>AI 礼物算法推荐</strong>；</li>
+          <li>❌ <strong>电商内置商城与自动下单</strong>；</li>
+          <li>❌ <strong>在线支付与红包转账功能</strong>；</li>
+          <li>❌ <strong>公开社区与社交动态广场</strong>。</li>
+        </ul>
+      </section>
+
+      <!-- Section 7 -->
+      <section id="sec-pages">
+        <h2>七、页面结构设计</h2>
+        <p>移动端优先，底部主导航设置四个核心主入口，<strong>通知信息精简移至页面右上角铃铛，以实时角标形式呈现</strong>：</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 15%;">入口</th>
+                <th style="width: 25%;">页面名称</th>
+                <th style="width: 60%;">核心呈现内容与操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>顶部右上角</strong></td>
+                <td><strong>消息通知铃铛</strong></td>
+                <td>未读红点/数字角标呈现，点击滑出通知浮层，查看情侣绑定邀请、送礼揭晓提醒与心愿变动通知</td>
+              </tr>
+              <tr>
+                <td><strong>Tab 1</strong></td>
+                <td><strong>首页 (Home)</strong></td>
+                <td>情侣绑定天数与状态卡片、我的心愿数量统计、待完成送礼任务速览、快捷入口（记心愿、为TA抽选）</td>
+              </tr>
+              <tr>
+                <td><strong>Tab 2</strong></td>
+                <td><strong>心愿清单 (Wishes)</strong></td>
+                <td>顶部分段控制（【我的心愿】⇋【TA的心愿】）、视图模式切换、分类与优先级过滤、心愿增删改查、清单一键暂停</td>
+              </tr>
+              <tr>
+                <td><strong>Tab 3</strong></td>
+                <td><strong>为TA送礼 (Gift Draw)</strong></td>
+                <td>“为TA送礼”抽选控制台、最高预算筛选、盲盒动态抽选动画、结果弹窗（就选它了 / 再抽一次）、正在准备的送礼任务列表</td>
+              </tr>
+              <tr>
+                <td><strong>Tab 4</strong></td>
+                <td><strong>我的 (Profile)</strong></td>
+                <td>头像昵称资料修改、情侣关系管理、送礼历史回顾、账号与隐私设置、原型多视角切换器</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 8 -->
+      <section id="sec-flows">
+        <h2>八、核心用户流程</h2>
+
+        <h3>流程 1：创建心愿流程</h3>
+        <div class="flow-steps">
+          <div class="step-box">打开 App</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">进入「心愿」页面</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">点击「+ 记心愿」</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">填写标题、价格、规格、优先级</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">保存入库</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">另一半随时在TA的心愿中可见</div>
+        </div>
+
+        <h3>流程 2：惊喜送礼抽选与履约流程</h3>
+        <div class="flow-steps">
+          <div class="step-box">进入「抽选」页</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">选择设置最高预算</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">点击「开始随机抽选！」</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">抽中礼物结果弹窗</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">点击「就选它了」锁定</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">线下采购后标记「已购买」</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box primary">纪念日当面送出并「确认已送出」</div>
+          <span class="step-arrow">→</span>
+          <div class="step-box">全屏礼花揭晓，沉淀至历史</div>
+        </div>
+      </section>
+
+      <!-- Section 9 -->
+      <section id="sec-criteria">
+        <h2>九、原型验收标准（Definition of Done）</h2>
+        <div class="callout callout-p0">
+          <strong>第一版 MVP 原型验收清单（全部已验证）：</strong>
+        </div>
+        <ul>
+          <li>✅ 用户能够正常新增、编辑和删除心愿，并支持设置价格、规格、多图片和优先级；</li>
+          <li>✅ 支持情侣 1 对 1 绑定与解绑流程，解绑后未完成的送礼流程立即安全终止；</li>
+          <li>✅ 在「心愿」页面可自如切换查看「我的心愿」与「TA的心愿」；</li>
+          <li>✅ 送礼方可设置最高预算，系统仅匹配标价且不超标的心愿；</li>
+          <li>✅ 抽选弹窗提供<strong>「就选它了」</strong>与<strong>「再抽一次」</strong>；点击再抽一次直接触发下一轮并排除刚抽中物品；</li>
+          <li>✅ 抽中与购买状态对心愿主人严格保密，送出瞬间触发庆祝仪式与揭晓通知；</li>
+          <li>✅ 双方均可在「送礼历史」中查阅完成的历史记录；</li>
+          <li>✅ 支持顶部切换「小桃」与「阿澈」视角，无缝体验双方的秘密互动与通知反馈。</li>
+        </ul>
+      </section>
+
+      <!-- Section 10 -->
+      <section id="sec-roadmap">
+        <h2>十、未来版本规划 (Roadmap)</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 20%;">版本阶段</th>
+                <th style="width: 30%;">规划核心</th>
+                <th style="width: 50%;">功能清单</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>V2.0 迭代</strong></td>
+                <td>关系拓展与社交分层</td>
+                <td>
+                  • 支持死党、闺蜜、家人多重关系；<br>
+                  • 支持单份专属生日分享链接（外部访客免登录浏览）；<br>
+                  • 独立避雷清单与精细化分组权限。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>V3.0 迭代</strong></td>
+                <td>智能化与生态整合</td>
+                <td>
+                  • AI 智能识别主流电商商品链接（自动抓取图文、色号与价格）；<br>
+                  • 基于历史喜好画像的 AI 礼物灵感顾问；<br>
+                  • 纪念日送礼日历与预算规划提醒。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 11: Resume Highlight -->
+      <section id="sec-resume">
+        <h2>💡 简历项目描述与产出</h2>
+        <div class="resume-block">
+          <h4>
+            <span>📌 个人简历项目描述（精炼一句话 + 成果阐述，可直接复制使用）</span>
+            <button class="copy-btn" onclick="copyResumeText()">复制文本</button>
+          </h4>
+          <p class="resume-text" id="resumeText">
+            <strong>项目名称</strong>：「心愿之间」（Wish Between）情侣心愿分享与智能送礼产品<br>
+            <strong>核心定位</strong>：一款专为情侣打造的送礼决策与惊喜应用，通过心愿清单和优先级加权抽选机制，帮助情侣表达礼物偏好，同时保留送礼过程中的惊喜感。<br>
+            <strong>个人职责</strong>：独立负责用户需求分析、V1.0 PRD 需求文档制定、信息架构规划、状态机设计，以及基于 React 19 + TypeScript + Tailwind CSS 的全交互高保真 Web Prototype 开发与全链路验证。
+          </p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    function copyResumeText() {
+      const text = document.getElementById('resumeText').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('简历项目介绍已复制到剪贴板！');
+      }).catch(err => {
+        console.error('复制失败', err);
+      });
+    }
+
+    // Smooth scroll for TOC
+    document.querySelectorAll('.toc-item a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElem = document.querySelector(targetId);
+        if (targetElem) {
+          targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

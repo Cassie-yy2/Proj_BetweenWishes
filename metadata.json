@@ -1,0 +1,6 @@
+{
+  "name": "心愿之间 - 社交送礼与心愿清单",
+  "description": "以心愿清单为基础、以随机抽选为核心的社交送礼应用，保留送礼惊喜感，支持关系绑定、预算筛选、隐私保密与避雷清单。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
